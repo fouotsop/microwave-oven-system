@@ -5,7 +5,6 @@
 - [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
 
 ## Introduction
 Model checking involves verifying if the model of a system satisfies a given set of specifications(properties). The verification is done by a model checking tool or a model checker. The one presented here is NuSMV.
@@ -19,6 +18,9 @@ oven will stop. The oven will stop also whenever the door is
 opened during cooking. If the oven is started while the door is
 open, an error will occur, and the oven will not heat. In such a
 case, the reset button may be used.
+
+![system model](microwave-oven-model.png)
+
 ## Installation
 Download NuSVM from the [official website](https://nusmv.fbk.eu/downloads.html)
 
@@ -32,8 +34,14 @@ export PATH=$PATH:path/to/your/NuSMV/binary
 
 ```
 ## Usage
-[Provide instructions on how to use the microwave oven system. Include examples and screenshots if applicable.]
+In a module file, Declare the state variables for the microwave oven system and initialise them
 
-## Contributing
-[Explain how others can contribute to the development of the microwave oven system. Include guidelines for submitting pull requests or reporting issues.]
+Define transitions from different states.
 
+Define the specifications of the system.
+
+Model check the system by running the model checker
+```bash
+NuSMV module-file.smv
+```
+The output returns true for all the specifications of the system if the System model is correct, otherwise, it returns a counter example, this can be due to wrong model of the system or incorrect formalization of the specifications
