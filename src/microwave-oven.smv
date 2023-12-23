@@ -1,0 +1,58 @@
+MODULE main
+
+  VAR
+    Heat: boolean;
+    Start: boolean;
+    Closed: boolean;
+    Error: boolean;
+
+  ASSIGN
+    init(Heat) := FALSE;
+    init(Start) := FALSE;
+    init(Closed) := FALSE;
+    init(Error) := FALSE;
+
+  TRANS
+    -- Transition when the oven starts
+    !Start & !Closed & !Heat & !Error -> next(Start) = TRUE & next(Closed) = FALSE & next(Heat) = FALSE & next(Error) = TRUE;
+
+		-- Transition when system is in initial state and door is closed
+    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+
+		-- Transition when oven starts with error and door is closed
+    Start & !Close & !Heat & Error -> (next(Start) = TRUE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = TRUE);		
+
+		-- Transition when the 
+    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+
+
+    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+
+
+    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+
+
+    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+
+
+    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+
+
+	  !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);			
+
+
+	  !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
+
+
+	  !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
+
+
+	  !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
+
+SPEC AG (Heat -> Closed);  -- Safety property: If the oven heats, then the door is closed
+
+SPEC AG (Start -> AF Heat); -- Liveness property: Whenever the start button is pushed, eventually the oven will heat
+
+SPEC AG ((Start & !Error) -> AF Heat); -- Liveness property: Whenever the oven is correctly started, eventuall y the oven will heat
+
+SPEC AG (Error -> EF Heat); -- Liveness property: Whenever an error occur, it will be still possible to cook
