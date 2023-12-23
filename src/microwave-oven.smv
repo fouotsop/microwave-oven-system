@@ -14,40 +14,40 @@ MODULE main
 
   TRANS
     -- Transition when the oven starts
-    !Start & !Closed & !Heat & !Error -> next(Start) = TRUE & next(Closed) = FALSE & next(Heat) = FALSE & next(Error) = TRUE;
+    !Start & !Closed & !Heat & !Error -> (next(Start) = TRUE) & (next(Closed) = FALSE) & (next(Heat) = FALSE) & (next(Error) = TRUE);
 
 		-- Transition when system is in initial state and door is closed
-    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+    !Start & !Closed & !Heat & !Error -> (next(Start) = FALSE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
 
 		-- Transition when oven starts with error and door is closed
-    Start & !Close & !Heat & Error -> (next(Start) = TRUE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = TRUE);		
+    Start & !Closed & !Heat & Error -> (next(Start) = TRUE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = TRUE);		
 
-		-- Transition when the 
-    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+		-- Transition when the door is opened with the oven started along with an error
+    Start & Closed & !Heat & Error -> (next(Start) = TRUE) & (next(Closed) = FALSE) & (next(Heat) = FALSE) & (next(Error) = TRUE);		
 
+    -- Transition when the oven is reset
+    Start & Closed & !Heat & Error -> (next(Start) = FALSE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
 
-    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+    -- Transition when the door of the oven is opened after reset
+    !Start & Closed & !Heat & !Error -> (next(Start) = FALSE) & (next(Closed) = FALSE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
 
+    -- Transition when the oven is started with the door closed
+    !Start & Closed & !Heat & !Error -> (next(Start) = TRUE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
 
-    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+    -- Transition when the oven warms up
+    Start & Closed & !Heat & !Error -> (next(Start) = TRUE) & (next(Closed) = TRUE) & (next(Heat) = TRUE) & (next(Error) = FALSE);		
 
+    -- Transition when the oven starts cooking
+	  Start & Closed & Heat & !Error -> (next(Start) = FALSE) & (next(Closed) = TRUE) & (next(Heat) = TRUE) & (next(Error) = FALSE);			
 
-    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
+    -- Transition when the oven finishes cooking
+	  !Start & Closed & Heat & !Error -> (next(Start) = FALSE) & (next(Closed) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
 
+    -- Transition when the oven is cooking
+	  !Start & Closed & Heat & !Error -> (next(Start) = FALSE) & (next(Closed) = TRUE) & (next(Heat) = TRUE) & (next(Error) = FALSE);
 
-    !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);		
-
-
-	  !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);			
-
-
-	  !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
-
-
-	  !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
-
-
-	  !Start & !Close & !Heat & !Error -> (next(Start) = FALSE) & (next(Close) = TRUE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
+    -- Transition when the oven is opened during cooking
+	  !Start & Close & Heat & !Error -> (next(Start) = FALSE) & (next(Close) = FALSE) & (next(Heat) = FALSE) & (next(Error) = FALSE);
 
 SPEC AG (Heat -> Closed);  -- Safety property: If the oven heats, then the door is closed
 
